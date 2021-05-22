@@ -67,6 +67,16 @@ namespace WarehouseTests
             int stock = warehouse.CurrentStock(product);
             Assert.AreEqual(amount + 99, stock);
         }
+
+        [TestMethod]
+        [DataRow("")]
+        public void Empty_Name_Given_Should_Throw_Exception(string product)
+        {
+            var warehouse = new SimpleWarehouse();
+
+            TestDelegate test = () => warehouse.CurrentStock(product);
+            Assert.Throws<InvalidOperationException>(test, "Product name can't be empty");
+        }
     }
 }
 
