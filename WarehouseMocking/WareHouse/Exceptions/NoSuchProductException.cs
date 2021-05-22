@@ -6,5 +6,9 @@ namespace WareHouse.Exceptions
 {
     class NoSuchProductException : Exception
     {
+        public NoSuchProductException(string message)
+        : base(message)
+        {
+        }
     }
 }
