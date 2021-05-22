@@ -37,6 +37,8 @@ namespace WareHouse
             if (string.IsNullOrEmpty(product))
                 throw new InvalidOperationException("Product name can't be empty");
 
+            if (amount < 1)
+                throw new InvalidOperationException("The amount can't be less than 1");
 
             bool exist = this.stock.TryGetValue(product, out int value);
 
@@ -84,6 +86,9 @@ namespace WareHouse
         {
             if (string.IsNullOrEmpty(product))
                 throw new InvalidOperationException("Product name can't be empty");
+
+            if (amount < 1)
+                throw new InvalidOperationException("The amount can't be less than 1");
 
             if (this.HasProduct(product))
             {
