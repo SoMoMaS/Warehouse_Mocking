@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using WareHouse.Exceptions;
 
 namespace WareHouse
 {
@@ -30,7 +31,12 @@ namespace WareHouse
             if (string.IsNullOrEmpty(product))
                 throw new InvalidOperationException("Product name can't be empty");
 
-            throw new NotImplementedException();
+            if (this.HasProduct(product))
+                return this.stock[product];
+            else
+            {
+                throw new NoSuchProductException($"There is no such product as: {product} in the stock ");
+            }
         }
 
         public bool HasProduct(string product)
