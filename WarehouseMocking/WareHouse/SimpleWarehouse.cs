@@ -95,7 +95,7 @@ namespace WareHouse
                 this.stock.TryGetValue(product, out int value);
 
                 if (value < amount)
-                    throw new InsufficientStockException($"The amount exceedes the stock of this product: {product}, amount wanted: {amount}, stock: {value}");
+                    throw new InsufficientStockException($"The amount exceedes the stock of this product: {product}");
                 else
                     this.stock[product] = value - amount;
 
