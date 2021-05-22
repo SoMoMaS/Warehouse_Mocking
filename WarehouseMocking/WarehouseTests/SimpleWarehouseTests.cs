@@ -77,6 +77,40 @@ namespace WarehouseTests
             TestDelegate test = () => warehouse.CurrentStock(product);
             Assert.Throws<InvalidOperationException>(test, "Product name can't be empty");
         }
+
+        [TestMethod]
+        [DataRow("toothpaste")]
+        [DataRow("shoes")]
+        public void Hasproduct_Given_Product_Doesnt_Exist_Should_Return_False(string product)
+        {
+            var warehouse = new SimpleWarehouse();
+            bool exist = warehouse.HasProduct(product);
+            Assert.False(exist);
+        }
+
+        [TestMethod]
+        [DataRow("toothpaste")]
+        [DataRow("shoes")]
+        public void Hasproduct_Given_Product_Exists_Should_Return_True(string product)
+        {
+            var warehouse = new SimpleWarehouse();
+            warehouse.AddStock(product, 5);
+            bool exist = warehouse.HasProduct(product);
+            Assert.True(exist);
+        }
+
+
+
+
+        [TestMethod]
+        [DataRow("")]
+        public void Hasproduct_Empty_Name_Given_Should_Throw_Exception(string product)
+        {
+            var warehouse = new SimpleWarehouse();
+
+            TestDelegate test = () => warehouse.HasProduct(product);
+            Assert.Throws<InvalidOperationException>(test, "Product name can't be empty");
+        }
     }
 }
 
