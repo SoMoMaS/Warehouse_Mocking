@@ -30,12 +30,22 @@ namespace WareHouse
 
         internal bool CanFillOrder(IWarehouse warehouse)
         {
-            throw new NotImplementedException();
+            bool hasProduct = warehouse.HasProduct(product);
+            int stock = warehouse.CurrentStock(product);
+
+            return hasProduct && stock > this.amount;
         }
 
         internal void Fill(IWarehouse warehouse)
         {
-            throw new NotImplementedException();
+            try
+            {
+                warehouse.TakeStock(this.product, this.amount);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
     }
 }
