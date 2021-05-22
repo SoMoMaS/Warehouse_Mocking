@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
+[assembly: InternalsVisibleTo("WarehouseTests")]
 namespace WareHouse
 {
+    
     class Order
     {
         private string product;
@@ -14,7 +17,7 @@ namespace WareHouse
                 throw new InvalidOperationException("Product name can't be empty");
 
             if (amount < 1)
-                throw new InvalidOperationException("Amount can't be smaller than 1.");
+                throw new InvalidOperationException("The amount of the product can't be smaller than 1.");
 
             this.product = product;
             this.amount = amount;
