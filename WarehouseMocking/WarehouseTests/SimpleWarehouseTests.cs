@@ -49,12 +49,23 @@ namespace WarehouseTests
         [DataRow("toothpaste", 2)]
         [DataRow("running shoes", 99)]
         [DataRow("shirt", 7)]
-        public void CurrentStock_Existing_Product_Given_Should_Return_Amount(string product, int amount)
+        public void CurrentStock_New_Product_Given_Should_Return_Amount(string product, int amount)
         {
             var warehouse = new SimpleWarehouse();
             warehouse.AddStock(product, amount);
             int stock = warehouse.CurrentStock(product);
             Assert.AreEqual(amount, stock);
+        }
+
+        [TestMethod]
+        [DataRow("toothpaste", 2)]
+        public void CurrentStock_Existing_Product_Given_Should_Return_New_Amount(string product, int amount)
+        {
+            var warehouse = new SimpleWarehouse();
+            warehouse.AddStock(product, 99);
+            warehouse.AddStock(product, amount);
+            int stock = warehouse.CurrentStock(product);
+            Assert.AreEqual(amount + 99, stock);
         }
     }
 }
