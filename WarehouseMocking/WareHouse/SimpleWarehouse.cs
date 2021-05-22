@@ -20,7 +20,7 @@ namespace WareHouse
         /// <summary>
         /// Defines the stock.
         /// </summary>
-        private Dictionary<string, int> stock;
+        internal Dictionary<string, int> stock;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SimpleWarehouse"/> class.
