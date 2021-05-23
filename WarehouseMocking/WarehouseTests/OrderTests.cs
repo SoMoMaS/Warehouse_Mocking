@@ -107,5 +107,24 @@ namespace WarehouseTests
             mock.Verify(cal => cal.HasProduct(product), Times.Once);
             mock.Verify(cal => cal.CurrentStock(product), Times.Once);
         }
+
+        [TestCase("toothpaste", 2)]
+        [TestCase("running shoes", 99)]
+        [TestCase("shirt", 7)]
+        public void Order_Class_Calls_IWareHouse_TakeStock_One_Time(string product, int amount)
+        {
+            var order = new Order(product, amount);
+
+            var mock = new Mock<IWarehouse>();
+
+            mock.Setup(cal => cal.TakeStock(product, amount));
+
+            IWarehouse warehouse = mock.Object;
+            order.CanFillOrder(warehouse);
+            order.Fill(warehouse);
+
+            mock.Verify(cal => cal.TakeStock(product, amount), Times.Once);
+        }
     }
 }
+
