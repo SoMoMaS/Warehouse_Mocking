@@ -16,7 +16,7 @@ namespace WareHouse
     /// <summary>
     /// Defines the <see cref="Order" />.
     /// </summary>
-    internal class Order
+    class Order
     {
         /// <summary>
         /// Defines the product.

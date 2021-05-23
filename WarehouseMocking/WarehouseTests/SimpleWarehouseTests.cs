@@ -1,21 +1,23 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using WareHouse;
 using WareHouse.Exceptions;
-using Assert = NUnit.Framework.Assert;
 
 namespace WarehouseTests
 {
-    [TestClass]
     public class SimpleWarehouseTests
     {
-        [TestMethod]
-        [DataRow("toothpaste", 2)]
-        [DataRow("running shoes", 99)]
-        [DataRow("shirt", 7)]
+        [SetUp]
+        public static void Setup()
+        {
+        }
+
+
+        [TestCase("toothpaste", 2)]
+        [TestCase("running shoes", 99)]
+        [TestCase("shirt", 7)]
         public void Simplewarehouse_Creates_A_New_Product_By_Calling_AddStock(string product, int amount)
         {
             var warehouse = new SimpleWarehouse();
@@ -24,9 +26,8 @@ namespace WarehouseTests
         }
 
 
-        [TestMethod]
-        [DataRow("running shoes", -5)]
-        [DataRow("shirt", -147)]
+        [TestCase("running shoes", -5)]
+        [TestCase("shirt", -147)]
         public void Trying_To_Add_Negative_Amount_Should_Throw_Exception(string product, int amount)
         {
             var warehouse = new SimpleWarehouse();
@@ -35,8 +36,7 @@ namespace WarehouseTests
             Assert.Throws<InvalidOperationException>(test, "The amount can't be less than 1");
         }
 
-        [TestMethod]
-        [DataRow("", 5)]
+        [TestCase("", 5)]
         public void Trying_To_Add_Empty_String_Should_Throw_Exception(string product, int amount)
         {
             var warehouse = new SimpleWarehouse();
@@ -46,10 +46,9 @@ namespace WarehouseTests
         }
 
 
-        [TestMethod]
-        [DataRow("toothpaste", 2)]
-        [DataRow("running shoes", 99)]
-        [DataRow("shirt", 7)]
+        [TestCase("toothpaste", 2)]
+        [TestCase("running shoes", 99)]
+        [TestCase("shirt", 7)]
         public void CurrentStock_New_Product_Given_Should_Return_Amount(string product, int amount)
         {
             var warehouse = new SimpleWarehouse();
@@ -58,8 +57,7 @@ namespace WarehouseTests
             Assert.AreEqual(amount, stock);
         }
 
-        [TestMethod]
-        [DataRow("toothpaste", 2)]
+        [TestCase("toothpaste", 2)]
         public void CurrentStock_Existing_Product_Given_Should_Return_New_Amount(string product, int amount)
         {
             var warehouse = new SimpleWarehouse();
@@ -69,8 +67,7 @@ namespace WarehouseTests
             Assert.AreEqual(amount + 99, stock);
         }
 
-        [TestMethod]
-        [DataRow("")]
+        [TestCase("")]
         public void Empty_Name_Given_Should_Throw_Exception(string product)
         {
             var warehouse = new SimpleWarehouse();
@@ -79,9 +76,8 @@ namespace WarehouseTests
             Assert.Throws<InvalidOperationException>(test, "Product name can't be empty");
         }
 
-        [TestMethod]
-        [DataRow("toothpaste")]
-        [DataRow("shoes")]
+        [TestCase("toothpaste")]
+        [TestCase("shoes")]
         public void Hasproduct_Given_Product_Doesnt_Exist_Should_Return_False(string product)
         {
             var warehouse = new SimpleWarehouse();
@@ -89,9 +85,8 @@ namespace WarehouseTests
             Assert.False(exist);
         }
 
-        [TestMethod]
-        [DataRow("toothpaste")]
-        [DataRow("shoes")]
+        [TestCase("toothpaste")]
+        [TestCase("shoes")]
         public void Hasproduct_Given_Product_Exists_Should_Return_True(string product)
         {
             var warehouse = new SimpleWarehouse();
@@ -100,8 +95,7 @@ namespace WarehouseTests
             Assert.True(exist);
         }
 
-        [TestMethod]
-        [DataRow("")]
+        [TestCase("")]
         public void Hasproduct_Empty_Name_Given_Should_Throw_Exception(string product)
         {
             var warehouse = new SimpleWarehouse();
@@ -110,8 +104,7 @@ namespace WarehouseTests
             Assert.Throws<InvalidOperationException>(test, "Product name can't be empty");
         }
 
-        [TestMethod]
-        [DataRow("")]
+        [TestCase("")]
         public void TakeStock_Empty_Name_Given_Should_Throw_Exception(string product)
         {
             var warehouse = new SimpleWarehouse();
@@ -120,9 +113,8 @@ namespace WarehouseTests
             Assert.Throws<InvalidOperationException>(test, "Product name can't be empty");
         }
 
-        [TestMethod]
-        [DataRow("toothpaste", -20)]
-        [DataRow("shoes", 0)]
+        [TestCase("toothpaste", -20)]
+        [TestCase("shoes", 0)]
         public void TakeStock_Amount_Less_Than_One_Should_Throw_Exception(string product, int amount)
         {
             var warehouse = new SimpleWarehouse();
@@ -131,9 +123,8 @@ namespace WarehouseTests
         }
 
 
-        [TestMethod]
-        [DataRow("toothpaste", 20)]
-        [DataRow("shoes", 20)]
+        [TestCase("toothpaste", 20)]
+        [TestCase("shoes", 20)]
         public void TakeStock_Amount_Is_Bigger_Than_Stock_Should_Throw_Exception(string product, int amount)
         {
             var warehouse = new SimpleWarehouse();
@@ -142,9 +133,8 @@ namespace WarehouseTests
             Assert.Throws<InsufficientStockException>(test, $"The amount exceedes the stock of this product: {product}");
         }
 
-        [TestMethod]
-        [DataRow("knife")]
-        [DataRow("ball")]
+        [TestCase("knife")]
+        [TestCase("ball")]
         public void TakeStock_Given_Product_Doesnt_Exist_Should_Throw_Exception(string product)
         {
             var warehouse = new SimpleWarehouse();
@@ -152,9 +142,8 @@ namespace WarehouseTests
             Assert.Throws<NoSuchProductException>(test, $"There is no such product as: {product} in the stock ");
         }
 
-        [TestMethod]
-        [DataRow("toothpaste", 10)]
-        [DataRow("shoes", 10)]
+        [TestCase("toothpaste", 10)]
+        [TestCase("shoes", 10)]
         public void TakeStock_Given_Product_Exists_Should_Take_The_Amount_Correctly(string product, int amount)
         {
             var warehouse = new SimpleWarehouse();
