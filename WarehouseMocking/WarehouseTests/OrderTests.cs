@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Moq;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -82,7 +83,29 @@ namespace WarehouseTests
 
             bool isFilled = order.isFilled();
             Assert.IsTrue(isFilled);
+        }
 
+
+        [TestCase("toothpaste", 2)]
+        [TestCase("running shoes", 99)]
+        [TestCase("shirt", 7)]
+        public void Order_Class_Calls_IWareHouse_HasProduct_And_CurrentStock_One_Time(string product, int amount)
+        {
+            var order = new Order(product, amount);
+
+            var mock = new Mock<IWarehouse>();
+
+            mock.Setup(cal => cal.HasProduct(product)).Returns(true);
+            mock.Setup(cal => cal.CurrentStock(product)).Returns(200);
+
+            IWarehouse warehouse = mock.Object;
+
+            bool canFilled = order.CanFillOrder(warehouse);
+
+            Assert.IsTrue(canFilled);
+
+            mock.Verify(cal => cal.HasProduct(product), Times.Once);
+            mock.Verify(cal => cal.CurrentStock(product), Times.Once);
         }
     }
 }
