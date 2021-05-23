@@ -12,6 +12,7 @@ using System.Runtime.CompilerServices;
 namespace WareHouse
 {
     using System;
+    using WareHouse.Exceptions;
 
     /// <summary>
     /// Defines the <see cref="Order" />.
@@ -43,6 +44,10 @@ namespace WareHouse
         /// </summary>
         /// <param name="product">The product<see cref="string"/>.</param>
         /// <param name="amount">The amount<see cref="int"/>.</param>
+        /// <exception cref="System.InvalidOperationException">Throws Invalid operation exception if the product
+        /// name is empty or null.</exception>
+        /// /// <exception cref="System.InvalidOperationException">Throws Invalid operation exception if the amount 
+        /// of the product is less than 1.</exception>
         public Order(string product, int amount)
         {
             if (string.IsNullOrEmpty(product))
@@ -83,9 +88,10 @@ namespace WareHouse
         /// The Fill.
         /// </summary>
         /// <param name="warehouse">The warehouse<see cref="IWarehouse"/>.</param>
+        /// /// <exception cref="System.Exception">Rethrows every exception occured in the TakeStock method.</exception>
         internal void Fill(IWarehouse warehouse)
         {
-            if (this.isCanFillOrderCalled)
+            if (this.isCanFillOrderCalled && !this.isFilledCalled)
             {
                 try
                 {
@@ -98,6 +104,9 @@ namespace WareHouse
 
                 this.isFilledCalled = true;
             }
+
+            else
+                throw new OrderAlreadyFilledException("Order already filled.");
         }
     }
 }

@@ -1,19 +1,36 @@
-﻿using Moq;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using WareHouse;
+﻿//----------------------------------------------------------------------
+// <copyright file=".cs" company="FHWN.ac.at">
+// Copyright (c) FHWN. All rights reserved.
+// </copyright>
+// <summary></summary>
+// <author>Soma Molnar</author>
+// -----------------------------------------------------------------------
 
 namespace WarehouseTests
 {
-    class OrderTests
+    using Moq;
+    using NUnit.Framework;
+    using WareHouse;
+    using WareHouse.Exceptions;
+
+    /// <summary>
+    /// Defines the <see cref="OrderTests" />.
+    /// </summary>
+    internal class OrderTests
     {
+        /// <summary>
+        /// The Setup.
+        /// </summary>
         [SetUp]
         public static void Setup()
         {
         }
 
+        /// <summary>
+        /// The Simple_Order_Created_Cannot_Be_Fulfilled_Should_Return_False.
+        /// </summary>
+        /// <param name="product">The product<see cref="string"/>.</param>
+        /// <param name="amount">The amount<see cref="int"/>.</param>
         [TestCase("toothpaste", 2)]
         [TestCase("running shoes", 99)]
         [TestCase("shirt", 7)]
@@ -27,6 +44,11 @@ namespace WarehouseTests
             Assert.IsFalse(canBeFulfilled);
         }
 
+        /// <summary>
+        /// The Simple_Order_Created_Can_Be_Fulfilled_Should_Return_True.
+        /// </summary>
+        /// <param name="product">The product<see cref="string"/>.</param>
+        /// <param name="amount">The amount<see cref="int"/>.</param>
         [TestCase("toothpaste", 2)]
         [TestCase("running shoes", 99)]
         [TestCase("shirt", 7)]
@@ -40,6 +62,11 @@ namespace WarehouseTests
             Assert.IsTrue(canBeFulfilled);
         }
 
+        /// <summary>
+        /// The Fill_Order_CanBeFilled_Should_Take_The_Product_Correctly.
+        /// </summary>
+        /// <param name="product">The product<see cref="string"/>.</param>
+        /// <param name="amount">The amount<see cref="int"/>.</param>
         [TestCase("toothpaste", 2)]
         [TestCase("running shoes", 99)]
         [TestCase("shirt", 7)]
@@ -53,10 +80,36 @@ namespace WarehouseTests
             order.Fill(warehouse);
             int stock = warehouse.stock[product];
             Assert.AreEqual(100 - amount, stock);
-
-
         }
 
+        /// <summary>
+        /// The Fill_Order_CanBeFilled_Should_Take_The_Product_Correctly.
+        /// </summary>
+        /// <param name="product">The product<see cref="string"/>.</param>
+        /// <param name="amount">The amount<see cref="int"/>.</param>
+        [TestCase("toothpaste", 2)]
+        [TestCase("running shoes", 99)]
+        [TestCase("shirt", 7)]
+        public void Fill_Order_Already_Called_Should_Throw_Exception(string product, int amount)
+        {
+            var warehouse = new SimpleWarehouse();
+            warehouse.AddStock(product, 200);
+
+            var order = new Order(product, amount);
+            order.CanFillOrder(warehouse);
+            order.Fill(warehouse);
+
+            TestDelegate test = () => order.Fill(warehouse);
+            Assert.Throws<OrderAlreadyFilledException>(test, "Order already filled.");
+
+            
+        }
+
+        /// <summary>
+        /// The IsFilled_Called_Before_Fill_Should_Return_False.
+        /// </summary>
+        /// <param name="product">The product<see cref="string"/>.</param>
+        /// <param name="amount">The amount<see cref="int"/>.</param>
         [TestCase("toothpaste", 2)]
         [TestCase("running shoes", 99)]
         [TestCase("shirt", 7)]
@@ -67,9 +120,13 @@ namespace WarehouseTests
             var order = new Order(product, amount);
             bool isFilled = order.isFilled();
             Assert.IsFalse(isFilled);
-
         }
 
+        /// <summary>
+        /// The IsFilled_Called_After_Fill_Should_Return_True.
+        /// </summary>
+        /// <param name="product">The product<see cref="string"/>.</param>
+        /// <param name="amount">The amount<see cref="int"/>.</param>
         [TestCase("toothpaste", 2)]
         [TestCase("running shoes", 99)]
         [TestCase("shirt", 7)]
@@ -85,7 +142,11 @@ namespace WarehouseTests
             Assert.IsTrue(isFilled);
         }
 
-
+        /// <summary>
+        /// The Order_Class_Calls_IWareHouse_HasProduct_And_CurrentStock_One_Time.
+        /// </summary>
+        /// <param name="product">The product<see cref="string"/>.</param>
+        /// <param name="amount">The amount<see cref="int"/>.</param>
         [TestCase("toothpaste", 2)]
         [TestCase("running shoes", 99)]
         [TestCase("shirt", 7)]
@@ -108,6 +169,11 @@ namespace WarehouseTests
             mock.Verify(cal => cal.CurrentStock(product), Times.Once);
         }
 
+        /// <summary>
+        /// The Order_Class_Calls_IWareHouse_TakeStock_One_Time.
+        /// </summary>
+        /// <param name="product">The product<see cref="string"/>.</param>
+        /// <param name="amount">The amount<see cref="int"/>.</param>
         [TestCase("toothpaste", 2)]
         [TestCase("running shoes", 99)]
         [TestCase("shirt", 7)]
@@ -124,7 +190,7 @@ namespace WarehouseTests
             order.Fill(warehouse);
 
             mock.Verify(cal => cal.TakeStock(product, amount), Times.Once);
+            mock.Verify(cal => cal.HasProduct(product), Times.Once);
         }
     }
 }
-

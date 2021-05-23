@@ -32,6 +32,10 @@ namespace WareHouse
         /// </summary>
         /// <param name="product">The product<see cref="string"/>.</param>
         /// <param name="amount">The amount<see cref="int"/>.</param>
+        /// <exception cref="System.InvalidOperationException">Throws Invalid operation exception if the product
+        /// name is empty or null.</exception>
+        /// <exception cref="System.InvalidOperationException">Throws Invalid operation exception if the amount 
+        /// of the product is less than 1.</exception>
         public void AddStock(string product, int amount)
         {
             if (string.IsNullOrEmpty(product))
@@ -53,6 +57,9 @@ namespace WareHouse
         /// </summary>
         /// <param name="product">The product<see cref="string"/>.</param>
         /// <returns>The <see cref="int"/>.</returns>
+        /// <exception cref="System.InvalidOperationException">Throws Invalid operation exception if the product
+        /// name is empty or null.</exception>
+        /// <exception cref="NoSuchProductException">Throws if the product doesn't exist in the stock.</exception>
         public int CurrentStock(string product)
         {
             if (string.IsNullOrEmpty(product))
@@ -69,6 +76,8 @@ namespace WareHouse
         /// </summary>
         /// <param name="product">The product<see cref="string"/>.</param>
         /// <returns>The <see cref="bool"/>.</returns>
+        /// <exception cref="System.InvalidOperationException">Throws Invalid operation exception if the product
+        /// name is empty or null.</exception>
         public bool HasProduct(string product)
         {
             if (string.IsNullOrEmpty(product))
@@ -82,6 +91,13 @@ namespace WareHouse
         /// </summary>
         /// <param name="product">The product<see cref="string"/>.</param>
         /// <param name="amount">The amount<see cref="int"/>.</param>
+        /// <exception cref="System.InvalidOperationException">Throws Invalid operation exception if the product
+        /// name is empty or null.</exception>
+        /// <exception cref="System.InvalidOperationException">Throws Invalid operation exception if the amount 
+        /// of the product is less than 1.</exception>
+        /// <exception cref="InsufficientStockException">Throws exception if the amount is bigger than the stock of the 
+        /// given product. </exception>
+        /// <exception cref="NoSuchProductException">Throws if the product doesn't exist in the stock.</exception>
         public void TakeStock(string product, int amount)
         {
             if (string.IsNullOrEmpty(product))
